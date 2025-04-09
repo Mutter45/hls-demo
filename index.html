@@ -12,7 +12,7 @@
     <script src="https://tcplayer-1306264703.cos.ap-nanjing.myqcloud.com/tcplayer/test/hls.min.js"></script>
     <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.v5.1.0.min.js"></script>
     <style>
-      .title {
+      .title, .desc {
         text-align: center;
         font-size: 20px;
       }
@@ -27,8 +27,6 @@
         button {
           width: 100px;
           height: 40px;
-        }
-        #play-btn {
           margin-right: 20px;
         }
       }
@@ -36,6 +34,10 @@
   </head>
   <body>
     <div class="title">hls拉流测试demo</div>
+    <div class="desc" style="margin-top: 20px;">
+      <span>拉流类型:</span>
+      <span id="type-text">hls</span>
+    </div>
     <div class="container">
       <video
         id="player-container-id"
@@ -47,10 +49,15 @@
     <div class="operation">
       <button id="play-btn">播放</button>
       <button id="pause-btn">暂停</button>
+      <button id="switch-rtc-btn">切换webrtc</button>
+      <button id="switch-hls-btn">切换hls</button>
     </div>
     <script>
       const playBtn = document.querySelector("#play-btn")
       const pauseBtn = document.querySelector("#pause-btn")
+      const switchRtcBtn = document.querySelector("#switch-rtc-btn")
+      const switchHlsBtn = document.querySelector("#switch-hls-btn")
+      const typeText = document.querySelector("#type-text")
       const liveInfo = {
         answerCount: 3,
         answerDuration: 10,
@@ -400,12 +407,34 @@
           })
         }
       }
+      function setTypeText(text) {
+        typeText.innerHTML = text
+      }
       const player = new Player(liveInfo)
       playBtn.addEventListener("click", () => {
         player.tcplayer.play()
       })
       pauseBtn.addEventListener("click", () => {
         player.tcplayer.pause()
+      })
+      // "pullUrl":"webrtc://pulltest.qianguolive.cn/testqg/1181669_qg6hd?txSecret=ff4eccabe9bd2678e80c28bcb1756cce&txTime=67F876BB"
+      /**
+       * cdn拉流直接切换webrtc
+       * https://va-eo.qianguolive.cn/testqg/1181681_qg6hd.m3u8?txSecret=79266dc3784c311c056536366a0f9745&txTime=67F8C1C0
+       * webrtc://pulltest.qianguolive.cn/testqg/1181669_qg6hd?txSecret=ff4eccabe9bd2678e80c28bcb1756cce&txTime=67F876BB
+       */
+       switchRtcBtn.addEventListener("click", () => {
+        player.tcplayer.src(`webrtc://pulltest.qianguolive.cn/testqg/1181681_qg6hd?txSecret=79266dc3784c311c056536366a0f9745&txTime=67F8C1C0`)
+        player.tcplayer.play()
+        setTypeText('webrtc')
+      })
+       /**
+       * 切换cdn
+       */
+      switchHlsBtn.addEventListener("click", () => {
+        player.tcplayer.src(`https://va-eo.qianguolive.cn/testqg/1181681_qg6hd.m3u8?txSecret=79266dc3784c311c056536366a0f9745&txTime=67F8C1C0`)
+        player.tcplayer.play()
+        setTypeText('hls')
       })
     </script>
   </body>
