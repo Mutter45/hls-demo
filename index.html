@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link href="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.min.css" rel="stylesheet"/>
+    <link
+      href="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.min.css"
+      rel="stylesheet"
+    />
     <!--播放器脚本文件-->
     <script src="https://tcplayer-1306264703.cos.ap-nanjing.myqcloud.com/tcplayer/test/hls.min.js"></script>
     <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.v5.1.0.min.js"></script>
@@ -18,20 +21,214 @@
       style="object-fit: cover"
     ></video>
     <script>
+      const liveInfo = {
+        answerCount: 3,
+        answerDuration: 10,
+        answerSwitch: "2",
+        answerTimingType: 1,
+        blackList: [],
+        canRecord: 0,
+        chartSwitch: 1,
+        countdownSwitch: 1,
+        couponModelId: null,
+        couponNeedSignNumber: 1,
+        couponSwitch: 1,
+        coverUrl: "https://h5.huacongjian.cn/default-live-cover.jpeg",
+        createTime: "2025-03-28 10:32:46",
+        endTime: "2025-04-07 10:14:26",
+        envelopNeedSignNumber: 1,
+        envelopeStatus: true,
+        freeDefineEnvelope: 0,
+        heatType: 1,
+        id: 1180462,
+        imStatus: true,
+        initFrequent: 0,
+        initVisitor: 0,
+        integral: 10,
+        integralNeedSignNumber: 1,
+        integralSwitch: 1,
+        isVertical: 0,
+        iscloseOnlineNumber: 0,
+        isopen: 1,
+        likeSwitch: 1,
+        linkTag: 0,
+        liveChannelConfig: {
+          liveChannelType: null,
+          pullType: 2,
+          pushType: 1,
+        },
+        liveConditionTaskRuleList: [],
+        liveEnvelope: '[{"liveMinute":1,"amount":0.3}]',
+        liveLogo: "https://h5.huacongjian.cn/default-live-cover.jpeg",
+        liveNotice: "哈哈哈",
+        liveQuestion: null,
+        liveStatus: 0,
+        liveTagId: 0,
+        liveTagName: null,
+        liveType: 2,
+        materialId: 0,
+        maxAnswerCount: 3,
+        memberShareRecordSwitch: 0,
+        minEnvelopeAmount: 0.1,
+        name: "cdn拉流测试-2",
+        newLiveQuestionVO: [
+          {
+            answer: "B",
+            answerCount: 3,
+            options: [
+              {
+                label: "A",
+                text: "1",
+              },
+              {
+                label: "B",
+                text: "1",
+              },
+              {
+                label: "C",
+                text: "1",
+              },
+              {
+                label: "D",
+                text: "1",
+              },
+            ],
+            questionId: 90,
+            questionNo: 1,
+            selected: true,
+            title: "1",
+          },
+        ],
+        oriCapacity: null,
+        passwd: "666",
+        peakNumber: null,
+        planStartTime: "2025-03-28 10:32:39",
+        playCapacity: null,
+        preheatingVideoId: 0,
+        preheatingVideoName: null,
+        preheatingVideoSwitch: 0,
+        preheatingVideoUrl: "",
+        pullUrl:
+          "https://va-eo.qianguolive.cn/testqg/1180462_qg6hd.m3u8?txSecret=bc7b332d302c54e0a22e553aa7f59a67&txTime=67E8AD47",
+        punchRelationCouponFlag: 0,
+        punchRelationEnvelopFlag: 0,
+        punchRelationIntegralFlag: 0,
+        punchSwitch: 0,
+        punchTimeList: null,
+        punchTimes: null,
+        pushUrl:
+          "rtmp://pushtest.qianguolive.cn/testqg/1180462?txSecret=8f0409ae9981de635290e8338e12872b&txTime=67E8AD47",
+        pwdOpen: false,
+        questionCount: 1,
+        redOf: "1",
+        registrationReplayOpen: 0,
+        replayCreateTime: null,
+        replayDouble: 1,
+        replayEndTime: null,
+        replayOpen: 0,
+        replayParamJson: null,
+        replayStartTime: null,
+        replayUrl: "",
+        replayVideoDuration: null,
+        replayVideoSize: null,
+        rewardCouponVOList: [
+          {
+            count: 1,
+            couponModelEntity: {
+              activityEndTime: "2025-03-26 23:59:59",
+              activityStartTime: "2025-03-11 00:00:00",
+              backupStatus: 2,
+              belongGoodsCategory: null,
+              couponGroupId: null,
+              createTime: "2025-03-11 23:33:33",
+              deleteFlag: 0,
+              discount: null,
+              enableStartTime: "2025-03-11 00:00:00",
+              enableTimeType: 1,
+              expireDay: null,
+              getLimit: -1,
+              giveCount: 21,
+              goodsDetailShow: 0,
+              id: 1145,
+              name: "理发券11",
+              overlayRule: "[]",
+              overlayUse: 0,
+              pause: 0,
+              reducedAmount: null,
+              remark: "11",
+              residueCount: 979,
+              status: 4,
+              thresholdAmount: 0.0,
+              topShopId: 1432201,
+              topShopName: "jmh千果总店",
+              total: 1000,
+              type: 3,
+              updateTime: "2025-03-29 11:50:51",
+              useDetail: "1.仅能理发\n2.解释权归总店所有",
+              useRange: -1,
+              userId: 1432201,
+              userName: "jmh千果总店",
+            },
+          },
+        ],
+        rewardRuleMemberLeveList: null,
+        rewardSwitch: 1,
+        rewardType: 0,
+        sendType: 2,
+        shareAgain: 0,
+        shareDomain: 1,
+        shareOpen: "1",
+        shopHoppingSwitch: 0,
+        showQuestion: 1,
+        showTime: "2025-03-28 10:32:46",
+        showTimeType: 1,
+        showTopFlag: null,
+        signBeepSwitch: 0,
+        signDuration: 1,
+        startTime: "2025-03-28 10:38:13",
+        timePointRewardLifeTime: null,
+        timePointRewardRuleList: [],
+        topShopId: 1432201,
+        topShopName: "jmh千果总店",
+        topicQuestion: null,
+        updateTime: "2025-04-07 10:14:26",
+        userTagIds: [],
+        videoLength: null,
+        videoName: null,
+        visibilityType: 0,
+        visibleUserTagName: null,
+        whiteList: [],
+      }
       class Player {
         constructor(options) {
           this.tcplayer = null
-          this.liveInfo = options
+          this.licenseUrl =
+            "https://license.vod2.myqcloud.com/license/v2/1327837990_1/v_cube.license"
+          // 会员信息
+          this.member = {
+            memberId: "",
+          }
+          this.liveInfo = liveInfo
           this.initTCPlayer()
         }
-        // 错误相关处理逻辑
+        // hls错误相关处理逻辑
         errorHlsPlay() {}
+        // 日志提交
+        aegisInfoAll() {}
+        // 展示封面逻辑
+        isShowTCPlayerPoster() {}
+        // tcplayer错误处理逻辑
+        videoError() {}
+        setTCPlayerUrl() {
+          const random = Math.floor(Math.random() * 10000)
+          return `${this.liveInfo.pullUrl.split("|")[0]}&randomString=${random}`
+        }
         initTCPlayer(type) {
           // TCPlayer的配置参数
           const options = {
             licenseUrl: this.licenseUrl,
-            //   width: uni.getSystemInfoSync().windowWidth,
-            //   height: videoContainer.offsetHeight,
+            width: 1600,
+            height: 900,
             controls: false,
             videoType: "LIVE", // hls 协议直播
             hlsConfig: {
@@ -49,14 +246,7 @@
               connectRetryDelay: 0,
               showLog: true,
             },
-          }
-
-          // liveType 2: 直播  3: 录播
-          if (this.liveInfo.liveType == 2) {
-            let src = this.setTCPlayerUrl()
-            options.sources = [{ src }]
-          } else if (this.liveInfo.liveType == 3) {
-            options.sources = [{ src: this.liveInfo.replayUrl }]
+            src: [{ src: this.setTCPlayerUrl() }],
           }
           // 初始化播放器
           this.tcplayer = TCPlayer(`player-container-id`, options)
@@ -83,8 +273,6 @@
 
           // 暂停时触发
           this.tcplayer.on("pause", (e) => {
-            // this.isShowTCPlayerPoster("none");
-            // this.$emit("envelopeCountDonPause", "视频pause");
             console.log(e, "视频pause")
             this.isPlaying = false
             this.aegisInfoAll(
@@ -176,7 +364,7 @@
           })
         }
       }
-      const player = new Player()
+      const player = new Player(liveInfo)
     </script>
   </body>
 </html>
