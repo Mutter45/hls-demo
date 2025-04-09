@@ -11,42 +11,67 @@
     <!--播放器脚本文件-->
     <script src="https://tcplayer-1306264703.cos.ap-nanjing.myqcloud.com/tcplayer/test/hls.min.js"></script>
     <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.v5.1.0.min.js"></script>
+    <style>
+      .title {
+        text-align: center;
+        font-size: 20px;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        margin: 20px;
+      }
+      .operation {
+        display: flex;
+        justify-content: center;
+        button {
+          width: 100px;
+          height: 40px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div>hls拉流测试demo</div>
-    <video
-      id="player-container-id"
-      webkit-playsinline
-      playsinline
-      style="object-fit: cover"
-    ></video>
+    <div class="title">hls拉流测试demo</div>
+    <div class="container">
+      <video
+        id="player-container-id"
+        webkit-playsinline
+        playsinline
+        style="object-fit: cover"
+      ></video>
+    </div>
+    <div class="operation">
+      <button id="btn">播放</button>
+    </div>
     <script>
+      const btn = document.querySelector("#btn")
       const liveInfo = {
         answerCount: 3,
         answerDuration: 10,
-        answerSwitch: "2",
-        answerTimingType: 1,
+        answerSwitch: null,
+        answerTimingType: 0,
         blackList: [],
         canRecord: 0,
         chartSwitch: 1,
         countdownSwitch: 1,
         couponModelId: null,
         couponNeedSignNumber: 1,
-        couponSwitch: 1,
+        couponSwitch: 0,
         coverUrl: "https://h5.huacongjian.cn/default-live-cover.jpeg",
-        createTime: "2025-03-28 10:32:46",
-        endTime: "2025-04-07 10:14:26",
+        createTime: "2025-04-09 15:16:26",
+        endTime: null,
         envelopNeedSignNumber: 1,
-        envelopeStatus: true,
+        envelopeStatus: false,
         freeDefineEnvelope: 0,
         heatType: 1,
-        id: 1180462,
+        id: 1181681,
         imStatus: true,
         initFrequent: 0,
         initVisitor: 0,
         integral: 10,
         integralNeedSignNumber: 1,
-        integralSwitch: 1,
+        integralSwitch: 0,
         isVertical: 0,
         iscloseOnlineNumber: 0,
         isopen: 1,
@@ -58,11 +83,11 @@
           pushType: 1,
         },
         liveConditionTaskRuleList: [],
-        liveEnvelope: '[{"liveMinute":1,"amount":0.3}]',
+        liveEnvelope: '[{"liveMinute":40,"amount":"0.3"}]',
         liveLogo: "https://h5.huacongjian.cn/default-live-cover.jpeg",
         liveNotice: "哈哈哈",
         liveQuestion: null,
-        liveStatus: 0,
+        liveStatus: 5,
         liveTagId: 0,
         liveTagName: null,
         liveType: 2,
@@ -70,7 +95,7 @@
         maxAnswerCount: 3,
         memberShareRecordSwitch: 0,
         minEnvelopeAmount: 0.1,
-        name: "cdn拉流测试-2",
+        name: "腾讯云cdn拉流",
         newLiveQuestionVO: [
           {
             answer: "B",
@@ -102,14 +127,14 @@
         oriCapacity: null,
         passwd: "666",
         peakNumber: null,
-        planStartTime: "2025-03-28 10:32:39",
+        planStartTime: "2025-04-09 15:16:16",
         playCapacity: null,
         preheatingVideoId: 0,
         preheatingVideoName: null,
         preheatingVideoSwitch: 0,
         preheatingVideoUrl: "",
         pullUrl:
-          "https://va-eo.qianguolive.cn/testqg/1180462_qg6hd.m3u8?txSecret=bc7b332d302c54e0a22e553aa7f59a67&txTime=67E8AD47",
+          "https://va-eo.qianguolive.cn/testqg/1181681_qg6hd.m3u8?txSecret=79266dc3784c311c056536366a0f9745&txTime=67F8C1C0",
         punchRelationCouponFlag: 0,
         punchRelationEnvelopFlag: 0,
         punchRelationIntegralFlag: 0,
@@ -117,7 +142,7 @@
         punchTimeList: null,
         punchTimes: null,
         pushUrl:
-          "rtmp://pushtest.qianguolive.cn/testqg/1180462?txSecret=8f0409ae9981de635290e8338e12872b&txTime=67E8AD47",
+          "rtmp://pushtest.qianguolive.cn/testqg/1181681?txSecret=960296ced48dfa7a70948d5ac23b8db5&txTime=67F8C1C0",
         pwdOpen: false,
         questionCount: 1,
         redOf: "1",
@@ -131,67 +156,28 @@
         replayUrl: "",
         replayVideoDuration: null,
         replayVideoSize: null,
-        rewardCouponVOList: [
-          {
-            count: 1,
-            couponModelEntity: {
-              activityEndTime: "2025-03-26 23:59:59",
-              activityStartTime: "2025-03-11 00:00:00",
-              backupStatus: 2,
-              belongGoodsCategory: null,
-              couponGroupId: null,
-              createTime: "2025-03-11 23:33:33",
-              deleteFlag: 0,
-              discount: null,
-              enableStartTime: "2025-03-11 00:00:00",
-              enableTimeType: 1,
-              expireDay: null,
-              getLimit: -1,
-              giveCount: 21,
-              goodsDetailShow: 0,
-              id: 1145,
-              name: "理发券11",
-              overlayRule: "[]",
-              overlayUse: 0,
-              pause: 0,
-              reducedAmount: null,
-              remark: "11",
-              residueCount: 979,
-              status: 4,
-              thresholdAmount: 0.0,
-              topShopId: 1432201,
-              topShopName: "jmh千果总店",
-              total: 1000,
-              type: 3,
-              updateTime: "2025-03-29 11:50:51",
-              useDetail: "1.仅能理发\n2.解释权归总店所有",
-              useRange: -1,
-              userId: 1432201,
-              userName: "jmh千果总店",
-            },
-          },
-        ],
+        rewardCouponVOList: [],
         rewardRuleMemberLeveList: null,
-        rewardSwitch: 1,
+        rewardSwitch: 0,
         rewardType: 0,
-        sendType: 2,
+        sendType: -1,
         shareAgain: 0,
         shareDomain: 1,
         shareOpen: "1",
         shopHoppingSwitch: 0,
-        showQuestion: 1,
-        showTime: "2025-03-28 10:32:46",
+        showQuestion: 0,
+        showTime: "2025-04-09 15:16:26",
         showTimeType: 1,
         showTopFlag: null,
         signBeepSwitch: 0,
         signDuration: 1,
-        startTime: "2025-03-28 10:38:13",
+        startTime: null,
         timePointRewardLifeTime: null,
         timePointRewardRuleList: [],
         topShopId: 1432201,
         topShopName: "jmh千果总店",
         topicQuestion: null,
-        updateTime: "2025-04-07 10:14:26",
+        updateTime: "2025-04-09 15:16:26",
         userTagIds: [],
         videoLength: null,
         videoName: null,
@@ -209,6 +195,12 @@
             memberId: "",
           }
           this.liveInfo = liveInfo
+          this.isPlaying = false
+          this.iShowObsPlayBtn = true
+          this.timer = null
+          this.waitingTimer = null
+          this.lastDecodedFrame = 0
+          this.lastRecordTime = -1
           this.initTCPlayer()
         }
         // hls错误相关处理逻辑
@@ -219,6 +211,46 @@
         isShowTCPlayerPoster() {}
         // tcplayer错误处理逻辑
         videoError() {}
+        checkQualityInterval() {
+          if (!this.liveInfo.pullUrl.startsWith("http")) return
+          if (this.timer) {
+            clearInterval(this.timer)
+          }
+
+          this.timer = setInterval(() => {
+            if (!this.tcplayer) {
+              clearInterval(this.timer)
+              return
+            }
+            const quality = this.tcplayer.getVideoPlaybackQuality()
+            const decodedFrames = quality.totalVideoFrames || 0
+            // console.log("开始检测视频拉流质量", this.lastDecodedFrame, decodedFrames)
+            if (this.lastDecodedFrame === 0 && decodedFrames) {
+              this.lastDecodedFrame = decodedFrames
+              return
+            }
+            // console.log(decodedFrames, "decodedFrames", this.tcplayer.paused(), this.lastDecodedFrame, new Date().getTime() - this.lastRecordTime);
+            if (this.tcplayer.paused() == false && decodedFrames) {
+              if (this.lastDecodedFrame !== decodedFrames) {
+                // console.log("视频播放正常");
+                this.lastDecodedFrame = decodedFrames
+                this.lastRecordTime = new Date().getTime()
+              } else if (
+                this.lastRecordTime !== -1 &&
+                new Date().getTime() - this.lastRecordTime > 4000
+              ) {
+                this.lastDecodedFrame = 0
+                this.lastRecordTime = -1
+                console.log("hls协议视频播放失败")
+                this.isPlaying = false
+                this.iShowObsPlayBtn = true
+                this.errorHlsPlay()
+                // this.tcplayer && this.tcplayer.src(this.setTCPlayerUrl())
+                // this.reStartTCPlayer('hls重试', { hls: '拉流失败' }, 50)
+              }
+            }
+          }, 2000)
+        }
         setTCPlayerUrl() {
           const random = Math.floor(Math.random() * 10000)
           return `${this.liveInfo.pullUrl.split("|")[0]}&randomString=${random}`
@@ -227,8 +259,8 @@
           // TCPlayer的配置参数
           const options = {
             licenseUrl: this.licenseUrl,
-            width: 1600,
-            height: 900,
+            width: 600,
+            height: 400,
             controls: false,
             videoType: "LIVE", // hls 协议直播
             hlsConfig: {
@@ -246,11 +278,11 @@
               connectRetryDelay: 0,
               showLog: true,
             },
-            src: [{ src: this.setTCPlayerUrl() }],
+            sources: [{ src: this.setTCPlayerUrl() }],
           }
+          console.log(this.setTCPlayerUrl(), "options")
           // 初始化播放器
           this.tcplayer = TCPlayer(`player-container-id`, options)
-          console.log(this.tcplayer, "创建播放器")
 
           // 当播放器能够开始播放视频时触发
           this.tcplayer.on("canplay", (e) => {
@@ -312,7 +344,6 @@
           // 因缓冲而暂停或停止后恢复播放时触发
           this.tcplayer.on("playing", (e) => {
             this.isShowTCPlayerPoster("none")
-            this.$emit("envelopeCountDonPlay", "视频")
             console.log(e, "视频playing")
             this.isPlaying = true
             this.iShowObsPlayBtn = false // 隐藏播放按钮
@@ -351,9 +382,9 @@
             // }
             // console.log("%c Line:353 🍕 data.data.code", "color:#6ec1c2", e.data.code);
             if (e.data.code == 1005 && this.playerId) {
-              this.$emit("reloadObsLive", "webrtcevent")
-              const video_div = document.getElementById(this.playerId)
-              video_div.className += " vjs-waiting"
+              // this.$emit("reloadObsLive", "webrtcevent")
+              // const video_div = document.getElementById(this.playerId)
+              // video_div.className += " vjs-waiting"
             }
           })
 
@@ -365,6 +396,9 @@
         }
       }
       const player = new Player(liveInfo)
+      btn.addEventListener("click", () => {
+        player.tcplayer.play()
+      })
     </script>
   </body>
 </html>
