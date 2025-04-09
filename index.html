@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link href="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.min.css" rel="stylesheet"/>
+    <!--播放器脚本文件-->
+    <script src="https://tcplayer-1306264703.cos.ap-nanjing.myqcloud.com/tcplayer/test/hls.min.js"></script>
+    <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.v5.1.0.min.js"></script>
+  </head>
+  <body>
+    <div>hls拉流测试demo</div>
+    <video
+      id="player-container-id"
+      webkit-playsinline
+      playsinline
+      style="object-fit: cover"
+    ></video>
+    <script>
+      class Player {
+        constructor(options) {
+          this.tcplayer = null
+          this.liveInfo = options
+          this.initTCPlayer()
+        }
+        // 错误相关处理逻辑
+        errorHlsPlay() {}
+        initTCPlayer(type) {
+          // TCPlayer的配置参数
+          const options = {
+            licenseUrl: this.licenseUrl,
+            //   width: uni.getSystemInfoSync().windowWidth,
+            //   height: videoContainer.offsetHeight,
+            controls: false,
+            videoType: "LIVE", // hls 协议直播
+            hlsConfig: {
+              maxBufferLength: 3, // 将缓冲时长设置为 3 秒
+              maxBufferSize: 20 * 1024 * 1024, // 缓冲区大小设置为 20MB，避免缓存过多导致延迟
+              maxMaxBufferLength: 5, // 最大缓冲时长上限设置为 5 秒
+              liveSyncDurationCount: 0, // 同步到直播边缘的时长（使用最新分片的数量），建议设置为 1
+              maxLiveSyncPlaybackRate: 0,
+              enableWorker: true,
+              lowLatencyMode: true, // 启用低延迟模式，确保播放器处理低延迟流
+            },
+            poster: this.liveInfo.coverUrl,
+            webrtcConfig: {
+              connectRetryCount: 5,
+              connectRetryDelay: 0,
+              showLog: true,
+            },
+          }
+
+          // liveType 2: 直播  3: 录播
+          if (this.liveInfo.liveType == 2) {
+            let src = this.setTCPlayerUrl()
+            options.sources = [{ src }]
+          } else if (this.liveInfo.liveType == 3) {
+            options.sources = [{ src: this.liveInfo.replayUrl }]
+          }
+          // 初始化播放器
+          this.tcplayer = TCPlayer(`player-container-id`, options)
+          console.log(this.tcplayer, "创建播放器")
+
+          // 当播放器能够开始播放视频时触发
+          this.tcplayer.on("canplay", (e) => {
+            this.isShowTCPlayerPoster("block")
+            console.log(e, "视频canplay")
+          })
+
+          // 开始加载数据时触发
+          this.tcplayer.on("loadstart", (e) => {
+            this.isShowTCPlayerPoster("block")
+            console.log(e, "视频loadstart")
+          })
+
+          // 已加载视频的 metadata
+          this.tcplayer.on("loadedmetadata", (e) => {
+            // this.isShowTCPlayerPoster("block");
+            console.log(e, "视频loadedmetadata")
+            this.checkQualityInterval()
+          })
+
+          // 暂停时触发
+          this.tcplayer.on("pause", (e) => {
+            // this.isShowTCPlayerPoster("none");
+            // this.$emit("envelopeCountDonPause", "视频pause");
+            console.log(e, "视频pause")
+            this.isPlaying = false
+            this.aegisInfoAll(
+              "OBS视频--播放暂停：",
+              {
+                ["类型"]: e.type,
+                ["信息"]: "播放暂停",
+              },
+              this.member.memberId
+            )
+          })
+
+          // 播放停止，下一帧内容不可用时触发
+          this.tcplayer.on("waiting", (e) => {
+            console.log(e, "视频waiting")
+            if (!this.liveInfo.pullUrl.startsWith("http")) return
+            clearTimeout(this.waitingTimer)
+            this.waitingTimer = setTimeout(() => {
+              !this.isPlaying && this.errorHlsPlay()
+            }, 10000)
+          })
+
+          // 开始播放，画面并没有开始渲染
+          this.tcplayer.on("play", (e) => {
+            console.log(e, "视频play")
+            this.aegisInfoAll(
+              "OBS视频--开始播放：",
+              {
+                ["信息"]: "开始播放",
+                ["playerId"]: this.playerId,
+                ["TCPlayer参数"]: options,
+              },
+              this.member.memberId
+            )
+          })
+
+          // 因缓冲而暂停或停止后恢复播放时触发
+          this.tcplayer.on("playing", (e) => {
+            this.isShowTCPlayerPoster("none")
+            this.$emit("envelopeCountDonPlay", "视频")
+            console.log(e, "视频playing")
+            this.isPlaying = true
+            this.iShowObsPlayBtn = false // 隐藏播放按钮
+            // this.aegisInfoAll('OBS视频--恢复播放：', {
+            // 	['信息']: '恢复播放'
+            // }, this.member.memberId);
+          })
+
+          // 当前播放位置有变更
+          this.tcplayer.on("timeupdate", (e) => {
+            // this.isShowTCPlayerPoster("none");
+            if (this.liveInfo.liveType == 3) {
+              this.recordBroadCastTimeUpdate()
+            }
+            // console.log(e, "视频timeupdate");
+          })
+
+          // 视频播放已结束时触发
+          this.tcplayer.on("ended", (e) => {
+            this.isShowTCPlayerPoster("block")
+            // this.$emit("envelopeCountDonPause", "视频ended");
+            if (this.liveInfo.liveType == 3) {
+              this.recordPlayEnded()
+            }
+            console.log(e, "视频ended")
+          })
+
+          // 播放 webrtc 时的事件集合
+          this.tcplayer.on("webrtcevent", (e) => {
+            // console.log(e, "视频webrtcevent", e.data.code)
+            // code码见此：https://cloud.tencent.com/document/product/881/30820
+            // if ([1001, 1002, 1004, 1005, 1006, 1007, 1008, 1009].includes(e.data.code)) {
+            // 	this.$emit("envelopeCountDonPause", "webrtcevent");
+            // } else if ([1003, 1010].includes(e.data.code)) {
+            // 	this.$emit("envelopeCountDonPlay", "webrtcevent");
+            // }
+            // console.log("%c Line:353 🍕 data.data.code", "color:#6ec1c2", e.data.code);
+            if (e.data.code == 1005 && this.playerId) {
+              this.$emit("reloadObsLive", "webrtcevent")
+              const video_div = document.getElementById(this.playerId)
+              video_div.className += " vjs-waiting"
+            }
+          })
+
+          // 视频播放出现错误时触发
+          this.tcplayer.on("error", (e) => {
+            console.log(e, "视频error")
+            this.videoError(e)
+          })
+        }
+      }
+      const player = new Player()
+    </script>
+  </body>
+</html>
