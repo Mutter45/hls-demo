@@ -28,6 +28,9 @@
           width: 100px;
           height: 40px;
         }
+        #play-btn {
+          margin-right: 20px;
+        }
       }
     </style>
   </head>
@@ -42,10 +45,12 @@
       ></video>
     </div>
     <div class="operation">
-      <button id="btn">播放</button>
+      <button id="play-btn">播放</button>
+      <button id="pause-btn">暂停</button>
     </div>
     <script>
-      const btn = document.querySelector("#btn")
+      const playBtn = document.querySelector("#play-btn")
+      const pauseBtn = document.querySelector("#pause-btn")
       const liveInfo = {
         answerCount: 3,
         answerDuration: 10,
@@ -396,8 +401,11 @@
         }
       }
       const player = new Player(liveInfo)
-      btn.addEventListener("click", () => {
+      playBtn.addEventListener("click", () => {
         player.tcplayer.play()
+      })
+      pauseBtn.addEventListener("click", () => {
+        player.tcplayer.pause()
       })
     </script>
   </body>
